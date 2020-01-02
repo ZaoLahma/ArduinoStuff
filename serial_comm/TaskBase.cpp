@@ -1,11 +1,11 @@
-#include "ActorBase.h"
+#include "TaskBase.h"
 
-ActorBase::ActorBase(const unsigned int _runPeriodicity) : 
+TaskBase::TaskBase(const unsigned int _runPeriodicity) : 
 runPeriodicity(_runPeriodicity), currTimeStamp(UINT_MAX)
 {
 }
 
-void ActorBase::run(const unsigned int newTimeStamp)
+void TaskBase::run(const unsigned int newTimeStamp)
 {
   if ((UINT_MAX == currTimeStamp) ||
       ((newTimeStamp - currTimeStamp) >= runPeriodicity))

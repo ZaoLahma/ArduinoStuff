@@ -1,13 +1,13 @@
-#ifndef HEADER_ACTOR_BASE
-#define HEADER_ACTOR_BASE
+#ifndef HEADER_TASK_BASE
+#define HEADER_TASK_BASE
 
-class ActorBase
+class TaskBase
 {
   public:
   static const unsigned int UINT_MAX = 0xFFFFFFFFu;
   void run(const unsigned int newTimeStamp);
 
-  ActorBase(const unsigned int _runPeriodicity);
+  TaskBase(const unsigned int _runPeriodicity);
 
   protected:
   const unsigned int runPeriodicity;
