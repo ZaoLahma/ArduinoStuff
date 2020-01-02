@@ -1,13 +1,13 @@
 #include "SerialCommTask.h"
 
-SerialCommTask* actor = NULL;
+SerialCommTask* serialCommTask = NULL;
 
 void setup() {
   const unsigned int runPeriodicity = 1000; //ms
   const long baudRate = 115200l;
-  actor = new SerialCommTask(runPeriodicity, baudRate);
+  serialCommTask = new SerialCommTask(runPeriodicity, baudRate);
 }
 
 void loop() {
-  actor->run(millis());
+  serialCommTask->run(millis());
 }
