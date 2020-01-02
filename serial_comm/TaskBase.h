@@ -4,7 +4,7 @@
 class TaskBase
 {
   public:
-  static const unsigned int UINT_MAX = 0xFFFFFFFFu;
+  static const unsigned int UINT_MAX = 0xFFFFu;
   void run(const unsigned int newTimeStamp);
 
   TaskBase(const unsigned int _runPeriodicity);
