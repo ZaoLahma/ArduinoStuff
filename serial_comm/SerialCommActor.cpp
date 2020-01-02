@@ -2,14 +2,14 @@
 
 #include "Arduino.h"
 
-SerialCommActor::SerialCommActor(const unsigned int runPeriodicity) : ActorBase(runPeriodicity)
+SerialCommActor::SerialCommActor(const unsigned int runPeriodicity, const long baudRate) : 
+ActorBase(runPeriodicity)
 {
-  
-  Serial.begin(9600);
+  Serial.begin(baudRate);
 }
 
 void SerialCommActor::execute(const unsigned int newTime)
 {
-  Serial.print("Ping at: ");
-  Serial.println(currTimeStamp);
+  Serial.print("Execute at: ");
+  Serial.println(newTime);
 }

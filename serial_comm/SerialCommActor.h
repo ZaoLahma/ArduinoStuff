@@ -6,9 +6,10 @@
 class SerialCommActor : public ActorBase
 {
   public:
-  SerialCommActor(const unsigned int runPeriodicity);
+  SerialCommActor(const unsigned int runPeriodicity, const long baudRate);
 
   protected:
+  
   void execute(const unsigned int newTime);
 
   private:
