@@ -9,33 +9,36 @@ class Vector
   public:
   Vector<T>(const unsigned int vectorCapacity) : elementCapacity(vectorCapacity), numDataElements(0)
   {
-    for (unsigned int i = 0; i < elementCapacity; ++i)
-    {
-      elements[i].element = NULL;
-    }
+    elements = new T[elementCapacity];
   }
 
-  void push_back(T* element)
+  ~Vector<T>()
   {
-    for (unsigned int i = 0; i < elementCapacity; ++i)
+    delete[] elements;
+  }
+
+  void push_back(const T& element)
+  {
+    if (!(numDataElements < elementCapacity))
     {
-      if (NULL == elements[i].element)
+      //Copy all values to new array
+      elementCapacity = 2 * elementCapacity;
+      T* elementsCopy = new T[elementCapacity];
+      for (unsigned int i = 0; i < numDataElements; ++i)
       {
-        elements[i].element = element;
-        numDataElements++;
-        break;
+        elementsCopy[i] = elements[i];
       }
+      delete[] elements;
+      elements = elementsCopy;
     }
+    
+    elements[numDataElements] = element;
+    numDataElements++;
   }
 
-  T* get(const unsigned int index)
+  T& element_at(const unsigned int index)
   {
-    if (index <= get_size())
-    {
-      return elements[index].element;
-    }
-
-    return NULL;
+    return elements[index];
   }
 
   const unsigned int get_size()
@@ -43,16 +46,15 @@ class Vector
     return numDataElements;
   }
 
-  protected:
-  unsigned int elementCapacity = 8;
-  
-  class ElementWrapper
+  void clear()
   {
-    public:
-    T* element;
-  };
+    numDataElements = 0;
+  }
   
-  ElementWrapper* elements = new ElementWrapper[elementCapacity];
+  protected:
+  unsigned int elementCapacity;
+  
+  T* elements;
 
   private:
   unsigned int numDataElements;

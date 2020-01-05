@@ -10,6 +10,9 @@ TaskBase(runPeriodicity)
 
 void SerialCommTask::execute(const unsigned int newTime)
 {
-  Serial.print("Execute at: ");
-  Serial.println(newTime);
+  if (0 < Serial.availableForWrite())
+  {
+    Serial.print("Execute at: ");
+    Serial.println(newTime);
+  }
 }
