@@ -8,7 +8,7 @@ template <class T>
 class Vector
 {
   public:
-  Vector<T>(const uint16_t vectorCapacity) : elementCapacity(vectorCapacity), numDataElements(0)
+  Vector<T>(const uint16_t vectorCapacity) : elementCapacity(vectorCapacity), numDataElements(0u)
   {
     if (0u == elementCapacity)
     {
@@ -27,9 +27,9 @@ class Vector
     if (!(numDataElements < elementCapacity))
     {
       //Copy all values to new array
-      elementCapacity = 2 * elementCapacity;
+      elementCapacity = 2u * elementCapacity;
       T* elementsCopy = new T[elementCapacity];
-      for (uint16_t i = 0; i < numDataElements; ++i)
+      for (uint16_t i = 0u; i < numDataElements; ++i)
       {
         elementsCopy[i] = elements[i];
       }
@@ -53,7 +53,7 @@ class Vector
 
   void clear()
   {
-    numDataElements = 0;
+    numDataElements = 0u;
   }
   
   protected:
