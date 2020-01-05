@@ -1,20 +1,20 @@
 #include "SerialCommTask.h"
-#include "InternalBlinkTask.h"
-#include "Vector.h"
+#include "BlinkTask.h"
+#include "TaskContext.h"
 
-SerialCommTask* serialCommTask = NULL;
-InternalBlinkTask* internalBlinkTask = NULL;
+TaskContext* taskContext = NULL;
 
 void setup() {
-  const unsigned int serialRunPeriodicity = 1000; //ms
-  const long baudRate = 115200l;
-  serialCommTask = new SerialCommTask(serialRunPeriodicity, baudRate);
+  taskContext = new TaskContext();
+  
+  const uint16_t serialRunPeriodicity = 1000; //ms
+  const unsigned long baudRate = 115200l;
+  taskContext->add_task(new SerialCommTask(serialRunPeriodicity, baudRate));
 
-  const unsigned int blinkRunPeriodicity = 100; //ms
-  internalBlinkTask = new InternalBlinkTask(blinkRunPeriodicity);
+  const uint16_t blinkRunPeriodicity = 2000; //ms
+  taskContext->add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
 }
 
 void loop() {
-  serialCommTask->run(millis());
-  internalBlinkTask->run(millis());
+  taskContext->run();
 }

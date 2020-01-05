@@ -6,11 +6,11 @@
 class SerialCommTask : public TaskBase
 {
   public:
-  SerialCommTask(const unsigned int runPeriodicity, const long baudRate);
+  SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate);
 
   protected:
   
-  void execute(const unsigned int newTime);
+  void execute(const unsigned long newTime);
 
   private:
 };

@@ -1,11 +1,11 @@
 #include "TaskBase.h"
 
-TaskBase::TaskBase(const unsigned int _runPeriodicity) : 
+TaskBase::TaskBase(const uint16_t _runPeriodicity) : 
 runPeriodicity(_runPeriodicity), currTimeStamp(UINT_MAX)
 {
 }
 
-void TaskBase::run(const unsigned int newTimeStamp)
+void TaskBase::run(const unsigned long newTimeStamp)
 {
   if ((UINT_MAX == currTimeStamp) ||
       ((newTimeStamp - currTimeStamp) >= runPeriodicity))

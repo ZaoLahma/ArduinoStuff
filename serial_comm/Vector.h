@@ -2,13 +2,18 @@
 #define HEADER_VECTOR
 
 #include "Arduino.h"
+#include <stdint.h>
 
 template <class T>
 class Vector
 {
   public:
-  Vector<T>(const unsigned int vectorCapacity) : elementCapacity(vectorCapacity), numDataElements(0)
+  Vector<T>(const uint16_t vectorCapacity) : elementCapacity(vectorCapacity), numDataElements(0)
   {
+    if (0u == elementCapacity)
+    {
+      elementCapacity++;
+    }
     elements = new T[elementCapacity];
   }
 
@@ -24,7 +29,7 @@ class Vector
       //Copy all values to new array
       elementCapacity = 2 * elementCapacity;
       T* elementsCopy = new T[elementCapacity];
-      for (unsigned int i = 0; i < numDataElements; ++i)
+      for (uint16_t i = 0; i < numDataElements; ++i)
       {
         elementsCopy[i] = elements[i];
       }
@@ -36,12 +41,12 @@ class Vector
     numDataElements++;
   }
 
-  T& element_at(const unsigned int index)
+  T& element_at(const uint16_t index)
   {
     return elements[index];
   }
 
-  const unsigned int get_size()
+  uint16_t size()
   {
     return numDataElements;
   }
@@ -52,12 +57,12 @@ class Vector
   }
   
   protected:
-  unsigned int elementCapacity;
+  uint16_t elementCapacity;
   
   T* elements;
 
   private:
-  unsigned int numDataElements;
+  uint16_t numDataElements;
   
 };
 

@@ -2,14 +2,15 @@
 #define HEADER_INTERNAL_BLINK_TASK
 
 #include "TaskBase.h"
+#include <stdint.h>
 
-class InternalBlinkTask : public TaskBase
+class BlinkTask : public TaskBase
 {
   public:
-  InternalBlinkTask(const unsigned int runPeriodicity);
+  BlinkTask(const uint16_t runPeriodicity, const uint8_t _pinNumber);
 
   protected:
-  void execute(const unsigned int newTime);
+  void execute(const unsigned long newTime);
 
   enum class BlinkMode
   {
@@ -18,6 +19,8 @@ class InternalBlinkTask : public TaskBase
   };
 
   BlinkMode blinkMode;
+
+  uint8_t pinNumber;
 
   private:
   
