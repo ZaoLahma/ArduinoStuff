@@ -8,11 +8,22 @@ TaskBase(runPeriodicity)
   Serial.begin(baudRate);
 }
 
+void SerialCommTask::sendMsg(MessageBase* message)
+{
+  messages.push_back(message);
+}
+
 void SerialCommTask::execute(const unsigned long newTime)
 {
-  if (0 < Serial.availableForWrite())
+  UNUSED(newTime);
+  for (unsigned int i = 0u; i < messages.size(); ++i)
   {
-    Serial.print("Execute at: ");
-    Serial.println(newTime);
+    Serial.println((uint8_t)messages.element_at(i)->getType());
+    Serial.write((uint8_t)messages.element_at(i)->getType());
+    char* data = messages.element_at(i)->encode();
+    if (NULL != data)
+    {
+      //Do stuff
+    }
   }
 }

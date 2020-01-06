@@ -1,15 +1,21 @@
 #include "SerialCommTask.h"
+#include "SerialCommIf.h"
 #include "BlinkTask.h"
 #include "TaskContext.h"
+#include "HandshakeMessage.h"
 
 TaskContext* taskContext = NULL;
 
 void setup() {
   taskContext = new TaskContext();
   
-  const uint16_t serialRunPeriodicity = 1000u; //ms
+  const uint16_t serialRunPeriodicity = 20; //ms
   const unsigned long baudRate = 115200l;
-  taskContext->add_task(new SerialCommTask(serialRunPeriodicity, baudRate));
+
+  SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate);
+  serialCommIf->sendMsg(new HandshakeMessage());
+  
+  taskContext->add_task(static_cast<SerialCommTask*>(serialCommIf));
 
   const uint16_t blinkRunPeriodicity = 2000u; //ms
   taskContext->add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
