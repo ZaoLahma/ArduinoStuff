@@ -18,7 +18,6 @@ void SerialCommTask::execute(const unsigned long newTime)
   UNUSED(newTime);
   for (unsigned int i = 0u; i < messages.size(); ++i)
   {
-    Serial.println((uint8_t)messages.element_at(i)->getType());
     Serial.write((uint8_t)messages.element_at(i)->getType());
     char* data = messages.element_at(i)->encode();
     if (NULL != data)

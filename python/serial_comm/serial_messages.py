@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from serial_utils import SerialUtils
 
 class MessageBase:
@@ -27,10 +27,10 @@ class SerialMessageCommunicator:
 
     @staticmethod
     def send_message(port, message):
-        SerialUtils.write_int8(port, message.msg_id)
+        SerialUtils.send_int8(port, message.msg_id)
         payload = message.encode()
         if None != payload:
             raise NotImplementedError
 
-class SerialMessages(Enum):
+class SerialMessages(IntEnum):
     HANDSHAKE = 0

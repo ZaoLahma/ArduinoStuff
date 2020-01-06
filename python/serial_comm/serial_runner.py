@@ -5,7 +5,7 @@ from serial_messages import HandshakeMessage
 class SerialRunner:
     def __init__(self, serial_port):
         self.serial_port = serial_port
-        self.port = serial.Serial(port=serial_port, baudrate=115200, timeout=0, writeTimeout=0)
+        self.port = serial.Serial(port=serial_port, baudrate=115200, timeout=500, writeTimeout=0)
         self.curr_state = self.handle_init
 
     def run(self):
