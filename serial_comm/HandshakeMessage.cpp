@@ -11,5 +11,10 @@ MessageBase(Messages::HANDSHAKE)
 
 char* HandshakeMessage::encode()
 {
-  return NULL;
+  return (char*)&payload;
+}
+
+MessageBase* HandshakeMessage::decode(const char* data)
+{
+  return this;
 }

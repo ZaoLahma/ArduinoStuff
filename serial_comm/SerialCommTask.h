@@ -5,6 +5,7 @@
 #include "Vector.h"
 #include "MessageBase.h"
 #include "SerialCommIf.h"
+#include "MessageReceiver.h"
 
 class SerialCommTask : public TaskBase, public SerialCommIf
 {
@@ -14,7 +15,11 @@ class SerialCommTask : public TaskBase, public SerialCommIf
 
   protected:
   void execute(const unsigned long newTime);
-  Vector<MessageBase*> messages = Vector<MessageBase*>(1);
+
+  void sendMessages();
+  void receiveMessages();
+  
+  Vector<MessageBase*> messagesToSend = Vector<MessageBase*>(1);
 
   private:
 };
