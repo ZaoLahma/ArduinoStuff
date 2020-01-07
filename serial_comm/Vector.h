@@ -46,6 +46,11 @@ class Vector
     return elements[index];
   }
 
+  T* data()
+  {
+    return elements;
+  }
+
   uint16_t size()
   {
     return numDataElements;
@@ -61,8 +66,9 @@ class Vector
   
   T* elements;
 
-  private:
   uint16_t numDataElements;
+
+  private:
   
 };
 

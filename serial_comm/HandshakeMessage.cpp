@@ -9,12 +9,9 @@ MessageBase(Messages::HANDSHAKE)
   
 }
 
-char* HandshakeMessage::encode()
+Vector<char> HandshakeMessage::encode()
 {
-  return (char*)&payload;
-}
-
-MessageBase* HandshakeMessage::decode(const char* data)
-{
-  return this;
+  Vector<char> retVal(1);
+  retVal.push_back((char)payload);
+  return retVal;
 }

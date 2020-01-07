@@ -8,9 +8,8 @@ class HandshakeMessage : public MessageBase
 {
   public:
   HandshakeMessage();
-  char* encode();
+  Vector<char> encode();
   uint8_t payload;
-  MessageBase* decode(const char* data);
   protected:
   private:
 };

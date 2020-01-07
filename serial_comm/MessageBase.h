@@ -2,12 +2,14 @@
 #define HEADER_MESSAGE_BASE
 
 #include "Messages.h"
+#include "Vector.h"
 
 class MessageBase
 {
   public:
   MessageBase(const Messages& type);
-  virtual char* encode() = 0;
+  virtual ~MessageBase() {}
+  virtual Vector<char> encode() = 0;
   Messages getType();
 
   protected:

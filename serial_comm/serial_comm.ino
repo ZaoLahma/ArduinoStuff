@@ -9,7 +9,7 @@ TaskContext* taskContext = NULL;
 void setup() {
   taskContext = new TaskContext();
   
-  const uint16_t serialRunPeriodicity = 20; //ms
+  const uint16_t serialRunPeriodicity = 200; //ms
   const unsigned long baudRate = 115200l;
 
   SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate);
