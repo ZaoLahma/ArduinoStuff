@@ -6,26 +6,23 @@
 #include "LogMessage.h"
 #include "ProgState.h"
 
-TaskContext* taskContext = NULL;
-SerialCommIf* serialCommIf = NULL;
+TaskContext taskContext;
 
 void setup() {
-  taskContext = new TaskContext();
-  
   const uint16_t serialRunPeriodicity = 0u; //ms
   const unsigned long baudRate = 115200l;
 
-  serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate, new SerialProtocol());
+  SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate, new SerialProtocol());
   
-  taskContext->add_task(static_cast<SerialCommTask*>(serialCommIf));
+  taskContext.add_task(static_cast<SerialCommTask*>(serialCommIf));
 
   const uint16_t blinkRunPeriodicity = 500u; //ms
-  taskContext->add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
+  taskContext.add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
 
   const uint16_t stateRunPeriodicity = 250u; //ms
-  taskContext->add_task(new ProgStateTask(stateRunPeriodicity, serialCommIf));
+  taskContext.add_task(new ProgStateTask(stateRunPeriodicity, serialCommIf));
 }
 
 void loop() {
-  taskContext->run();
+  taskContext.run();
 }
