@@ -10,6 +10,7 @@ class MessageBase
   MessageBase(const Messages& type);
   virtual ~MessageBase() {}
   virtual Vector<char> encode() = 0;
+  virtual void decode(const char* data, const uint16_t size) = 0;
   Messages getType();
 
   protected:

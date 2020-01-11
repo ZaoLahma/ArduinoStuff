@@ -3,16 +3,17 @@
 #include "BlinkTask.h"
 #include "TaskContext.h"
 #include "HandshakeMessage.h"
+#include "SerialProtocol.h"
 
 TaskContext* taskContext = NULL;
 
 void setup() {
   taskContext = new TaskContext();
   
-  const uint16_t serialRunPeriodicity = 200; //ms
+  const uint16_t serialRunPeriodicity = 200u; //ms
   const unsigned long baudRate = 115200l;
 
-  SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate);
+  SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, baudRate, new SerialProtocol());
   serialCommIf->sendMsg(new HandshakeMessage());
   
   taskContext->add_task(static_cast<SerialCommTask*>(serialCommIf));

@@ -1,10 +1,12 @@
 #ifndef HEADER_PROTOCOL_BASE
 #define HEADER_PROTOCOL_BASE
 
+#include "MessageBase.h"
+
 class ProtocolBase
 {
   public:
-  MessageBase* decode(const char* data) = 0;
+  virtual MessageBase* getMessage(const uint8_t msgType) const = 0;
 
   protected:
 

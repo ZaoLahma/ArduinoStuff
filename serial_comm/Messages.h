@@ -3,7 +3,7 @@
 
 enum class Messages
 {
-  HANDSHAKE = 0u
+  HANDSHAKE = 45u
 };
 
 #endif

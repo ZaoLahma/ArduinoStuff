@@ -2,9 +2,11 @@
 
 #include "Arduino.h"
 #include "HandshakeMessage.h"
+#include "ProtocolBase.h"
+#include "BigBuf.h"
 
-SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate) : 
-TaskBase(runPeriodicity)
+SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol) : 
+TaskBase(runPeriodicity), protocol(_protocol)
 {
   Serial.begin(baudRate);
 }
@@ -30,7 +32,7 @@ void SerialCommTask::sendMessages()
     if (0 != data.size())
     {
       uint16_t dataSize = data.size();
-      Serial.write(dataSize);
+      Serial.write((char*)&dataSize, 2u);
       Serial.write(data.data(), data.size());
     }
     delete messagesToSend.element_at(i);
@@ -40,17 +42,31 @@ void SerialCommTask::sendMessages()
 
 void SerialCommTask::receiveMessages()
 {
-  char smallBuf = 0u;
+  char smallBuf[2];
+  memset(smallBuf, 0u, sizeof(smallBuf));
   if (0 != Serial.available())
   {
     //Header = 1byte messageId, 2byte messageSize
     uint8_t messageId = 0xFFu;
-    Serial.readBytes(&smallBuf, 1u);
-    messageId = (uint8_t)smallBuf;
+    Serial.readBytes(&smallBuf[0u], 1u);
+    messageId = (uint8_t)smallBuf[0u];
+
+    uint16_t messageSize = 0x0000u;
+    Serial.readBytes(&smallBuf[0u], 2u);
+    messageSize = smallBuf[1u] << 8u | smallBuf[0u];
+
+    char bigBuf[512];
+    memset(bigBuf, 0u, 512);
+    Serial.readBytes(bigBuf, messageSize);
+
+    MessageBase* message = protocol->getMessage(messageId);
+    if (NULL != message)
+    {
+      message->decode(bigBuf, messageSize);
+    }
+
+    sendMsg(message);
     
-    HandshakeMessage* handshake = new HandshakeMessage();
-    handshake->payload = messageId;
-    sendMsg(handshake);
     digitalWrite(LED_BUILTIN, LOW);
   }
   else

@@ -7,10 +7,12 @@
 #include "SerialCommIf.h"
 #include "MessageReceiver.h"
 
+class ProtocolBase;
+
 class SerialCommTask : public TaskBase, public SerialCommIf
 {
   public:
-  SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate);
+  SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol);
   void sendMsg(MessageBase* message);
 
   protected:
@@ -20,6 +22,8 @@ class SerialCommTask : public TaskBase, public SerialCommIf
   void receiveMessages();
   
   Vector<MessageBase*> messagesToSend = Vector<MessageBase*>(1);
+
+  const ProtocolBase* protocol;
 
   private:
 };
