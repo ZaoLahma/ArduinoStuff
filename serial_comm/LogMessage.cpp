@@ -22,7 +22,7 @@ Vector<char> LogMessage::encode()
 
 void LogMessage::decode(const char* data, const uint16_t size)
 {
-  //Empty by choice
+  //Intentionally left empty
   UNUSED(data);
   UNUSED(size);
 }

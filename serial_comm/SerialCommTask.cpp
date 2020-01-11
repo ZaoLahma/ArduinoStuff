@@ -5,6 +5,7 @@
 #include "ProtocolBase.h"
 #include "Messages.h"
 #include "LogMessage.h"
+#include "BigBuf.h"
 
 SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol) : 
 TaskBase(runPeriodicity), protocol(_protocol)
@@ -43,30 +44,31 @@ void SerialCommTask::sendMessages()
 
 void SerialCommTask::receiveMessages()
 {
-  char smallBuf[2];
-  memset(smallBuf, 0u, sizeof(smallBuf));
   while (0 != Serial.available())
   {
     //Header = 1byte messageId, 2byte messageSize
     uint8_t messageId = 0xFFu;
-    Serial.readBytes(&smallBuf[0u], 1u);
-    messageId = (uint8_t)smallBuf[0u];
+    Serial.readBytes(BigBuf::getBigBuf(), 1u);
+    messageId = (uint8_t)BigBuf::getBigBuf()[0u];
 
     uint16_t messageSize = 0x0000u;
-    Serial.readBytes(&smallBuf[0u], 2u);
-    messageSize = smallBuf[1u] << 8u | smallBuf[0u];
+    Serial.readBytes(BigBuf::getBigBuf(), 2u);
+    messageSize = BigBuf::getBigBuf()[1u] << 8u | BigBuf::getBigBuf()[0u];
 
-    char bigBuf[256];
-    memset(bigBuf, 0u, 256);
-    Serial.readBytes(bigBuf, messageSize);
+    Serial.readBytes(BigBuf::getBigBuf(), messageSize);
 
     for (unsigned int i = 0u; i < messageReceivers.size(); ++i)
     {    
       MessageBase* message = protocol->getMessage(messageId);
       if (NULL != message)
       {
-        message->decode(bigBuf, messageSize);
+        message->decode(BigBuf::getBigBuf(), messageSize);
         messageReceivers.element_at(i)->storeMessage(message);
+      }
+      else
+      {
+        String msg = "No protocol defined to handle message: " + String(messageId);
+        sendMsg(new LogMessage(msg));
       }
     }
   }

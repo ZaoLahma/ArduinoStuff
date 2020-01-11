@@ -28,8 +28,6 @@ class HandshakeMessage(MessageBase):
         if HandshakeMessage.offset > 10000:
             HandshakeMessage.offset = 0
         to_send = self.payload + HandshakeMessage.offset
-        print("To send: " + str(to_send))
-        print("Encoded: " + str(struct.pack('<h', to_send)))
         return struct.pack('<h', to_send)
 
     def decode(self, data):
@@ -40,11 +38,9 @@ class SerialMessageFactory:
     def create_message(msg_id, data):
         msg = None
         if SerialMessages.HANDSHAKE == msg_id:
-            print("Handshake")
             msg = HandshakeMessage()
             msg.decode(data)
         elif SerialMessages.LOG == msg_id:
-            print("LogMessage")
             msg = LogMessage()
             msg.decode(data)
         return msg
@@ -53,18 +49,13 @@ class SerialMessageCommunicator:
     MSG_OFFSET = 0
     @staticmethod
     def receive_message(port):
-        print("Waiting for message")
         msg_type = SerialMessages(SerialUtils.receive_uint8(port))
-        print("Received message type")
         data_size = SerialUtils.receive_uint16(port)
-        print("Received data size")
         data = SerialUtils.receive(port, data_size)
-        print("Data size: " + str(data_size) + " data: " + str(data))
         return SerialMessageFactory.create_message(msg_type, data)
 
     @staticmethod
     def send_message(port, message):
-        print("Send message")
         SerialUtils.send_uint8(port, message.msg_id)
         payload = message.encode()
         if None != payload:

@@ -18,6 +18,7 @@ MessageBase* MessageReceiver::getNextMessage()
   else
   {
     messages.clear();
+    currMessage = 0u;
   }
 
   return retVal;

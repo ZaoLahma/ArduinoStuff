@@ -25,5 +25,4 @@ class SerialRunner:
     def handle_connected(self):
         msg = SerialMessageCommunicator.receive_message(self.port)
         if None != msg:
-           print("Received message in connected")
            print(msg.payload)

@@ -19,7 +19,7 @@ void setup() {
   
   taskContext->add_task(static_cast<SerialCommTask*>(serialCommIf));
 
-  const uint16_t blinkRunPeriodicity = 2000u; //ms
+  const uint16_t blinkRunPeriodicity = 500u; //ms
   taskContext->add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
 
   const uint16_t stateRunPeriodicity = 250u; //ms
