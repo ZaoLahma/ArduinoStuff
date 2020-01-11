@@ -6,6 +6,17 @@ class MessageBase:
     def encode(self):
         raise NotImplementedError
 
+class LogMessage(MessageBase):
+    def __init__(self):
+        self.payload = ""
+        self.msg_id = SerialMessages.LOG
+
+    def encode(self):
+        return NotImplementedError
+
+    def decode(self, data):
+        self.payload = data.decode("utf-8")
+
 class HandshakeMessage(MessageBase):
     offset = 0
     def __init__(self):
@@ -27,20 +38,28 @@ class HandshakeMessage(MessageBase):
 class SerialMessageFactory:
     @staticmethod
     def create_message(msg_id, data):
+        msg = None
         if SerialMessages.HANDSHAKE == msg_id:
+            print("Handshake")
             msg = HandshakeMessage()
             msg.decode(data)
-            return msg
-        return None
+        elif SerialMessages.LOG == msg_id:
+            print("LogMessage")
+            msg = LogMessage()
+            msg.decode(data)
+        return msg
 
 class SerialMessageCommunicator:
     MSG_OFFSET = 0
     @staticmethod
     def receive_message(port):
+        print("Waiting for message")
         msg_type = SerialMessages(SerialUtils.receive_uint8(port))
+        print("Received message type")
         data_size = SerialUtils.receive_uint16(port)
+        print("Received data size")
         data = SerialUtils.receive(port, data_size)
-        print("Data size: " + str(data_size) + " data " + str(data))
+        print("Data size: " + str(data_size) + " data: " + str(data))
         return SerialMessageFactory.create_message(msg_type, data)
 
     @staticmethod
@@ -53,4 +72,5 @@ class SerialMessageCommunicator:
             SerialUtils.send(port, payload)
 
 class SerialMessages(IntEnum):
-    HANDSHAKE = 45
+    HANDSHAKE = 0
+    LOG = 1

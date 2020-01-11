@@ -15,11 +15,15 @@ MessageBase* MessageReceiver::getNextMessage()
     retVal = messages.element_at(currMessage);
     currMessage++;
   }
+  else
+  {
+    messages.clear();
+  }
 
   return retVal;
 }
 
-void MessageReceiver::receiveMessage(MessageBase* msg)
+void MessageReceiver::storeMessage(MessageBase* msg)
 {
   messages.push_back(msg);
 }

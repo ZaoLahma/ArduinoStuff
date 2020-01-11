@@ -2,9 +2,11 @@
 
 #include "Arduino.h"
 #include "Messages.h"
+#include "Utils.h"
 
 HandshakeMessage::HandshakeMessage() :
-MessageBase(Messages::HANDSHAKE)
+MessageBase(Messages::HANDSHAKE),
+payload(0u)
 {
   
 }
@@ -22,6 +24,7 @@ Vector<char> HandshakeMessage::encode()
 
 void HandshakeMessage::decode(const char* data, const uint16_t size)
 {
+  UNUSED(size);
   payload = 0;
   payload = data[1] << 8u | (data[0] & 0x00FF);
 }

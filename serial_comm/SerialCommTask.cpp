@@ -3,6 +3,8 @@
 #include "Arduino.h"
 #include "HandshakeMessage.h"
 #include "ProtocolBase.h"
+#include "Messages.h"
+#include "LogMessage.h"
 
 SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol) : 
 TaskBase(runPeriodicity), protocol(_protocol)
@@ -54,16 +56,23 @@ void SerialCommTask::receiveMessages()
     Serial.readBytes(&smallBuf[0u], 2u);
     messageSize = smallBuf[1u] << 8u | smallBuf[0u];
 
-    char bigBuf[512];
-    memset(bigBuf, 0u, 512);
+    char bigBuf[256];
+    memset(bigBuf, 0u, 256);
     Serial.readBytes(bigBuf, messageSize);
 
-    MessageBase* message = protocol->getMessage(messageId);
-    if (NULL != message)
-    {
-      message->decode(bigBuf, messageSize);
+    for (unsigned int i = 0u; i < messageReceivers.size(); ++i)
+    {    
+      MessageBase* message = protocol->getMessage(messageId);
+      if (NULL != message)
+      {
+        message->decode(bigBuf, messageSize);
+        messageReceivers.element_at(i)->storeMessage(message);
+      }
     }
-
-    sendMsg(message);
   }
+}
+
+void SerialCommTask::registerMsgReceiver(MessageReceiver* receiver)
+{
+  messageReceivers.push_back(receiver);
 }

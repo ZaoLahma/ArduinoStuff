@@ -1,8 +1,7 @@
 #ifndef HEADER_TASK_BASE
 #define HEADER_TASK_BASE
 
-#define UNUSED(x) (void)(x)
-
+#include "Utils.h"
 #include <stdint.h>
 
 class TaskBase

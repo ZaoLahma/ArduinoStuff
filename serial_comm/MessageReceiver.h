@@ -9,7 +9,7 @@ class MessageReceiver
   public:
   MessageReceiver();
   MessageBase* getNextMessage();
-  void receiveMessage(MessageBase* msg);
+  void storeMessage(MessageBase* msg);
 
   protected:
   Vector<MessageBase*> messages = Vector<MessageBase*>(1);

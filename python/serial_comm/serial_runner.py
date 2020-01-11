@@ -14,11 +14,16 @@ class SerialRunner:
 
     def handle_init(self):
         print("Init...")
-        msg = HandshakeMessage()
-        SerialMessageCommunicator.send_message(self.port, msg)
         msg = SerialMessageCommunicator.receive_message(self.port)
         if None != msg:
-           print("Received message")
+           print("Received message in init")
            print(msg.payload)
-           if (0 > msg.payload):
-               exit(0)
+           msg = HandshakeMessage()
+           SerialMessageCommunicator.send_message(self.port, msg)
+           self.curr_state = self.handle_connected
+
+    def handle_connected(self):
+        msg = SerialMessageCommunicator.receive_message(self.port)
+        if None != msg:
+           print("Received message in connected")
+           print(msg.payload)
