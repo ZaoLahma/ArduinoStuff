@@ -3,7 +3,6 @@
 #include "Arduino.h"
 #include "HandshakeMessage.h"
 #include "ProtocolBase.h"
-#include "BigBuf.h"
 
 SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol) : 
 TaskBase(runPeriodicity), protocol(_protocol)
@@ -44,7 +43,7 @@ void SerialCommTask::receiveMessages()
 {
   char smallBuf[2];
   memset(smallBuf, 0u, sizeof(smallBuf));
-  if (0 != Serial.available())
+  while (0 != Serial.available())
   {
     //Header = 1byte messageId, 2byte messageSize
     uint8_t messageId = 0xFFu;
@@ -66,11 +65,5 @@ void SerialCommTask::receiveMessages()
     }
 
     sendMsg(message);
-    
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-  else
-  {
-    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
