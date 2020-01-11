@@ -12,7 +12,7 @@ class ProtocolBase;
 class SerialCommTask : public TaskBase, public SerialCommIf
 {
   public:
-  SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol);
+  SerialCommTask(const uint16_t runPeriodicity, Stream& _channel, const ProtocolBase* _protocol);
   void sendMsg(MessageBase* message);
   void registerMsgReceiver(MessageReceiver* receiver);
 
@@ -25,6 +25,8 @@ class SerialCommTask : public TaskBase, public SerialCommIf
   Vector<MessageBase*> messagesToSend = Vector<MessageBase*>(1);
 
   Vector<MessageReceiver*> messageReceivers = Vector<MessageReceiver*>(1);
+
+  Stream& channel;
 
   const ProtocolBase* protocol;
 

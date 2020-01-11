@@ -7,10 +7,13 @@
 #include "LogMessage.h"
 #include "BigBuf.h"
 
-SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, const unsigned long baudRate, const ProtocolBase* _protocol) : 
-TaskBase(runPeriodicity), protocol(_protocol)
+SerialCommTask::SerialCommTask(const uint16_t runPeriodicity, Stream& _channel, const ProtocolBase* _protocol) : 
+TaskBase(runPeriodicity), 
+channel(_channel),
+protocol(_protocol)
+
 {
-  Serial.begin(baudRate);
+  
 }
 
 void SerialCommTask::sendMsg(MessageBase* message)
@@ -29,13 +32,13 @@ void SerialCommTask::sendMessages()
 {
   for (unsigned int i = 0u; i < messagesToSend.size(); ++i)
   {
-    Serial.write((uint8_t)messagesToSend.element_at(i)->getType());
+    channel.write((uint8_t)messagesToSend.element_at(i)->getType());
     Vector<char> data = messagesToSend.element_at(i)->encode();
     if (0 != data.size())
     {
       uint16_t dataSize = data.size();
-      Serial.write((char*)&dataSize, 2u);
-      Serial.write(data.data(), data.size());
+      channel.write((char*)&dataSize, 2u);
+      channel.write(data.data(), data.size());
     }
     delete messagesToSend.element_at(i);
   }
@@ -44,18 +47,18 @@ void SerialCommTask::sendMessages()
 
 void SerialCommTask::receiveMessages()
 {
-  while (0 != Serial.available())
+  while (0 != channel.available())
   {
     //Header = 1byte messageId, 2byte messageSize
     uint8_t messageId = 0xFFu;
-    Serial.readBytes(BigBuf::getBigBuf(), 1u);
+    channel.readBytes(BigBuf::getBigBuf(), 1u);
     messageId = (uint8_t)BigBuf::getBigBuf()[0u];
 
     uint16_t messageSize = 0x0000u;
-    Serial.readBytes(BigBuf::getBigBuf(), 2u);
+    channel.readBytes(BigBuf::getBigBuf(), 2u);
     messageSize = BigBuf::getBigBuf()[1u] << 8u | BigBuf::getBigBuf()[0u];
 
-    Serial.readBytes(BigBuf::getBigBuf(), messageSize);
+    channel.readBytes(BigBuf::getBigBuf(), messageSize);
 
     for (unsigned int i = 0u; i < messageReceivers.size(); ++i)
     {    
