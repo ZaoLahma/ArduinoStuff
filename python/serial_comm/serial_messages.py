@@ -33,6 +33,17 @@ class HandshakeMessage(MessageBase):
     def decode(self, data):
         self.payload = struct.unpack('<h', data)[0]
 
+class HeartbeatMessage(MessageBase):
+    def __init__(self):
+        self.payload = None
+        self.msg_id = SerialMessages.HEARTBEAT
+
+    def encode(self):
+        return self.payload
+
+    def decode(self, data):
+        self.payload = None
+
 class SerialMessageFactory:
     @staticmethod
     def create_message(msg_id, data):
@@ -43,6 +54,9 @@ class SerialMessageFactory:
         elif SerialMessages.LOG == msg_id:
             msg = LogMessage()
             msg.decode(data)
+        elif SerialMessages.HEARTBEAT == msg_id:
+            msg = HeartbeatMessage()
+            msg.decode(data)
         return msg
 
 class SerialMessageCommunicator:
@@ -51,7 +65,9 @@ class SerialMessageCommunicator:
     def receive_message(port):
         msg_type = SerialMessages(SerialUtils.receive_uint8(port))
         data_size = SerialUtils.receive_uint16(port)
-        data = SerialUtils.receive(port, data_size)
+        data = None
+        if 0 != data_size:
+            data = SerialUtils.receive(port, data_size)
         return SerialMessageFactory.create_message(msg_type, data)
 
     @staticmethod
@@ -61,7 +77,10 @@ class SerialMessageCommunicator:
         if None != payload:
             SerialUtils.send_uint16(port, len(payload))
             SerialUtils.send(port, payload)
+        else:
+            SerialUtils.send_uint16(port, 0)
 
 class SerialMessages(IntEnum):
     HANDSHAKE = 0
     LOG = 1
+    HEARTBEAT = 2

@@ -2,6 +2,7 @@
 
 #include "Messages.h"
 #include "HandshakeMessage.h"
+#include "HeartbeatMessage.h"
 #include "Arduino.h"
 
 MessageBase* SerialProtocol::getMessage(const uint8_t msgType) const
@@ -15,6 +16,11 @@ MessageBase* SerialProtocol::getMessage(const uint8_t msgType) const
     case Messages::HANDSHAKE:
     {
       retVal = new HandshakeMessage();
+    }
+    break;
+    case Messages::HEARTBEAT:
+    {
+      retVal = new HeartbeatMessage();
     }
     break;
     default:

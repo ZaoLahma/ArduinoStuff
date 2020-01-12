@@ -34,10 +34,10 @@ void SerialCommTask::sendMessages()
   {
     channel.write((uint8_t)messagesToSend.element_at(i)->getType());
     Vector<char> data = messagesToSend.element_at(i)->encode();
+    uint16_t dataSize = data.size();
+    channel.write((char*)&dataSize, 2u);
     if (0 != data.size())
     {
-      uint16_t dataSize = data.size();
-      channel.write((char*)&dataSize, 2u);
       channel.write(data.data(), data.size());
     }
     delete messagesToSend.element_at(i);

@@ -1,5 +1,6 @@
 #include "ProgState.h"
 #include "HandshakeMessage.h"
+#include "HeartbeatMessage.h"
 #include "LogMessage.h"
 #include "MessageReceiver.h"
 #include "Utils.h"
@@ -16,30 +17,53 @@ void ProgStateTask::execute(const unsigned long newTime)
   {
     case State::INIT:
     {
-      commIf->sendMsg(new HandshakeMessage());
       currState = State::CONNECTING;
     }
     break;
 
     case State::CONNECTING:
-    {
-      MessageBase* msg = messages.getNextMessage();
-      while (NULL != msg)
+    { 
+      MessageBase* msg = NULL;
+      while (NULL != (msg = messages.getNextMessage()))
       {
         if (Messages::HANDSHAKE == msg->getType())
         {
           currState = State::CONNECTED;
-          commIf->sendMsg(new HandshakeMessage());
+          commIf->sendMsg(new LogMessage("Sending heartbeat"));
+          commIf->sendMsg(new HeartbeatMessage());
         }
         delete msg;
-        msg = messages.getNextMessage();
       }
+
+      if (State::CONNECTED != currState)
+      {
+        commIf->sendMsg(new HandshakeMessage());
+      }
+      commIf->sendMsg(new LogMessage("In state connecting"));
     }
     break;
 
     case State::CONNECTED:
     {
-      commIf->sendMsg(new LogMessage("Still connected"));
+      bool heartbeatReceived = false;
+      MessageBase* msg = NULL;
+      while (NULL != (msg = messages.getNextMessage()))
+      {
+        if (Messages::HEARTBEAT == msg->getType())
+        {
+          commIf->sendMsg(new LogMessage("Heartbeat received"));
+          heartbeatReceived = true;
+        }
+      }
+
+      if (!heartbeatReceived)
+      {
+        currState = State::CONNECTING;
+      }
+      else
+      {
+        commIf->sendMsg(new HeartbeatMessage());
+      }
     }
     break;
 
