@@ -54,6 +54,7 @@ void ProgStateTask::execute(const unsigned long newTime)
           commIf->sendMsg(new LogMessage("Heartbeat received"));
           heartbeatReceived = true;
         }
+        delete msg;
       }
 
       if (!heartbeatReceived)
