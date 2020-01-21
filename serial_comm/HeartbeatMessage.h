@@ -7,8 +7,8 @@ class HeartbeatMessage : public MessageBase
 {
   public:
   HeartbeatMessage();
-  Vector<char> encode();
-  void decode(const char* data, const uint16_t size);
+  Vector<unsigned char> encode();
+  void decode(const unsigned char* data, const uint16_t size);
 
   protected:
   private:

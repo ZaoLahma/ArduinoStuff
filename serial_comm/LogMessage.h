@@ -8,8 +8,8 @@ class LogMessage : public MessageBase
 {
   public:
   LogMessage(const String messge);
-  Vector<char> encode();
-  void decode(const char* data, const uint16_t size);
+  Vector<unsigned char> encode();
+  void decode(const unsigned char* data, const uint16_t size);
 
   protected:
   String payload;

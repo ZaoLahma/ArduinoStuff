@@ -32,10 +32,9 @@ void SerialCommTask::sendMessages()
 {
   for (unsigned int i = 0u; i < messagesToSend.size(); ++i)
   {
-    channel.write((uint8_t)messagesToSend.element_at(i)->getType());
-    Vector<char> data = messagesToSend.element_at(i)->encode();
+    Vector<unsigned char> data = protocol->encodeMessage(*messagesToSend.element_at(i));
     uint16_t dataSize = data.size();
-    channel.write((char*)&dataSize, 2u);
+    channel.write((unsigned char*)&dataSize, 2u);
     if (0 != data.size())
     {
       channel.write(data.data(), data.size());
@@ -49,12 +48,8 @@ void SerialCommTask::receiveMessages()
 {
   while (0 != channel.available())
   {
-    //Header = 1byte messageId, 2byte messageSize
-    uint8_t messageId = 0xFFu;
-    channel.readBytes(BigBuf::getBigBuf(), 1u);
-    messageId = (uint8_t)BigBuf::getBigBuf()[0u];
-
-    uint16_t messageSize = 0x0000u;
+    //Header = 2byte messageSize
+    uint16_t messageSize = 0u;
     channel.readBytes(BigBuf::getBigBuf(), 2u);
     messageSize = BigBuf::getBigBuf()[1u] << 8u | BigBuf::getBigBuf()[0u];
 
@@ -62,15 +57,14 @@ void SerialCommTask::receiveMessages()
 
     for (unsigned int i = 0u; i < messageReceivers.size(); ++i)
     {    
-      MessageBase* message = protocol->getMessage(messageId);
+      MessageBase* message = protocol->decodeMessage(BigBuf::getBigBuf(), messageSize);
       if (NULL != message)
       {
-        message->decode(BigBuf::getBigBuf(), messageSize);
         messageReceivers.element_at(i)->storeMessage(message);
       }
       else
       {
-        String msg = "No protocol defined to handle message: " + String(messageId);
+        String msg = "No protocol defined to handle message";
         sendMsg(new LogMessage(msg));
       }
     }

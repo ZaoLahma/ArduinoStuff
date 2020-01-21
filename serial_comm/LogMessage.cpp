@@ -8,9 +8,9 @@ LogMessage::LogMessage(const String message) : MessageBase(Messages::LOG), paylo
   
 }
 
-Vector<char> LogMessage::encode()
+Vector<unsigned char> LogMessage::encode()
 {
-  Vector<char> retVal(payload.length());
+  Vector<unsigned char> retVal(payload.length());
 
   for (unsigned int i = 0u; i < payload.length(); ++i)
   {
@@ -20,7 +20,7 @@ Vector<char> LogMessage::encode()
   return retVal;
 }
 
-void LogMessage::decode(const char* data, const uint16_t size)
+void LogMessage::decode(const unsigned char* data, const uint16_t size)
 {
   //Intentionally left empty
   UNUSED(data);

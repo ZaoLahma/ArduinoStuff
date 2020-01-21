@@ -11,18 +11,18 @@ payload(0u)
   
 }
 
-Vector<char> HandshakeMessage::encode()
+Vector<unsigned char> HandshakeMessage::encode()
 {
-  char buf[2u] = {(char) (payload & 0xFF), (char) (payload >> 8)};
+  unsigned char buf[2u] = {(unsigned char) (payload & 0xFF), (unsigned char) (payload >> 8)};
   
-  Vector<char> retVal(1);
+  Vector<unsigned char> retVal(1);
   retVal.push_back(buf[0]);
   retVal.push_back(buf[1]);
   
   return retVal;
 }
 
-void HandshakeMessage::decode(const char* data, const uint16_t size)
+void HandshakeMessage::decode(const unsigned char* data, const uint16_t size)
 {
   UNUSED(size);
   payload = 0;

@@ -7,10 +7,10 @@ class BigBuf
 {
   public:
   static const uint16_t BIG_BUF_SIZE;
-  static char* getBigBuf();
+  static unsigned char* getBigBuf();
 
   protected:
-  static char* buf;
+  static unsigned char* buf;
   
   private:
 };

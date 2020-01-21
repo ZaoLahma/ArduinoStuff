@@ -44,36 +44,46 @@ class HeartbeatMessage(MessageBase):
     def decode(self, data):
         self.payload = None
 
-class SerialMessageFactory:
+class SerialMessageProtocol:
     @staticmethod
-    def create_message(msg_id, data):
+    def create_message(data):
+        msg_id = struct.unpack('<B', data[0:1])[0]
         msg = None
         if SerialMessages.HANDSHAKE == msg_id:
             msg = HandshakeMessage()
-            msg.decode(data)
         elif SerialMessages.LOG == msg_id:
             msg = LogMessage()
-            msg.decode(data)
         elif SerialMessages.HEARTBEAT == msg_id:
             msg = HeartbeatMessage()
-            msg.decode(data)
+
+        if None != msg:
+            msg.decode(data[1:])
+
         return msg
+
+    @staticmethod
+    def encode(message):
+        data = struct.pack('<B', message.msg_id)
+        payload = message.encode()
+
+        if None != payload:
+            data += payload
+
+        return data
 
 class SerialMessageCommunicator:
     MSG_OFFSET = 0
     @staticmethod
     def receive_message(port):
-        msg_type = SerialMessages(SerialUtils.receive_uint8(port))
         data_size = SerialUtils.receive_uint16(port)
         data = None
         if 0 != data_size:
             data = SerialUtils.receive(port, data_size)
-        return SerialMessageFactory.create_message(msg_type, data)
+        return SerialMessageProtocol.create_message(data)
 
     @staticmethod
     def send_message(port, message):
-        SerialUtils.send_uint8(port, message.msg_id)
-        payload = message.encode()
+        payload = SerialMessageProtocol.encode(message)
         if None != payload:
             SerialUtils.send_uint16(port, len(payload))
             SerialUtils.send(port, payload)

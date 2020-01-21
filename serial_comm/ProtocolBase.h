@@ -6,7 +6,8 @@
 class ProtocolBase
 {
   public:
-  virtual MessageBase* getMessage(const uint8_t msgType) const = 0;
+  virtual Vector<unsigned char> encodeMessage(const MessageBase& message) const = 0;
+  virtual MessageBase* decodeMessage(const unsigned char* data, const uint16_t size) const = 0;
 
   protected:
 

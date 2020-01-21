@@ -3,7 +3,9 @@
 class SerialProtocol : public ProtocolBase
 {
   public:
-  MessageBase* getMessage(const uint8_t msgType) const;
+  Vector<unsigned char> encodeMessage(const MessageBase& message) const;
+  MessageBase* decodeMessage(const unsigned char* data, const uint16_t size) const;
+  
   protected:
   private:
 };
