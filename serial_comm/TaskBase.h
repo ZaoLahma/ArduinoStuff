@@ -4,6 +4,12 @@
 #include "Utils.h"
 #include <stdint.h>
 
+/**
+ * The base class for Tasks
+ * 
+ * It is responsible for executing
+ * the task with its configured periodicity
+ */
 class TaskBase
 {
   public:

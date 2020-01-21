@@ -8,7 +8,7 @@ HeartbeatMessage::HeartbeatMessage() : MessageBase(Messages::HEARTBEAT)
   
 }
 
-Vector<unsigned char> HeartbeatMessage::encode()
+Vector<unsigned char> HeartbeatMessage::encode() const
 {
   Vector<unsigned char> retVal(1);
   return retVal;

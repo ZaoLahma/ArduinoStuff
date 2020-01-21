@@ -1,5 +1,12 @@
 #include "ProtocolBase.h"
 
+/**
+ * SerialProtocol is responsible for
+ * constructing Message instances from 
+ * incoming byte encoded data, and
+ * constructing byte encoded data from
+ * Message instances.
+ */
 class SerialProtocol : public ProtocolBase
 {
   public:

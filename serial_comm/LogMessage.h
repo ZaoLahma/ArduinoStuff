@@ -4,11 +4,14 @@
 #include "MessageBase.h"
 #include "Arduino.h"
 
+/**
+ * Log message
+ */
 class LogMessage : public MessageBase
 {
   public:
   LogMessage(const String messge);
-  Vector<unsigned char> encode();
+  Vector<unsigned char> encode() const;
   void decode(const unsigned char* data, const uint16_t size);
 
   protected:

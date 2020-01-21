@@ -4,6 +4,11 @@
 #include "MessageBase.h"
 #include "Vector.h"
 
+/**
+ * Any Actor that wants to receive Messages 
+ * needs to register a MessageReceiver to
+ * the CommIf interface
+ */
 class MessageReceiver
 {
   public:

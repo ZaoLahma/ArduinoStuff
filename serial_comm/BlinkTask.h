@@ -4,6 +4,9 @@
 #include "TaskBase.h"
 #include <stdint.h>
 
+/**
+ * A pin toggling task
+ */
 class BlinkTask : public TaskBase
 {
   public:

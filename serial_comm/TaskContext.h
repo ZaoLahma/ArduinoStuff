@@ -4,11 +4,15 @@
 #include "TaskBase.h"
 #include "Vector.h"
 
+/**
+ * The class is responsible for running
+ * tasks that have been registered to it
+ */
 class TaskContext
 {
   public:
   void run();
-  void add_task(TaskBase* const task);
+  void addTask(TaskBase* const task);
 
   protected:
   Vector<TaskBase*> tasks = Vector<TaskBase*>(1);

@@ -15,13 +15,13 @@ void setup() {
 
   SerialCommIf* serialCommIf = new SerialCommTask(serialRunPeriodicity, Serial, new SerialProtocol());
   
-  taskContext.add_task(static_cast<SerialCommTask*>(serialCommIf));
+  taskContext.addTask(static_cast<SerialCommTask*>(serialCommIf));
 
   const uint16_t blinkRunPeriodicity = 100u; //ms
-  taskContext.add_task(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
+  taskContext.addTask(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
 
   const uint16_t stateRunPeriodicity = 250u; //ms
-  taskContext.add_task(new ProgStateTask(stateRunPeriodicity, serialCommIf));
+  taskContext.addTask(new ProgStateTask(stateRunPeriodicity, serialCommIf));
 }
 
 void loop() {

@@ -4,6 +4,9 @@
 #include "Arduino.h"
 #include <stdint.h>
 
+/**
+ * Vectors fo' life
+ */
 template <class T>
 class Vector
 {

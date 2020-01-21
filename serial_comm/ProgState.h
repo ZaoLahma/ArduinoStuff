@@ -5,6 +5,14 @@
 #include "SerialCommIf.h"
 #include "MessageReceiver.h"
 
+/**
+ * Class that keeps track of the overall program state
+ * 
+ * It will drop back to previous states if conditions
+ * to remain in the current state are no longer fulfilled,
+ * and will try to get back up to the highest possible
+ * state after
+ */
 class ProgStateTask : public TaskBase
 {
   public:

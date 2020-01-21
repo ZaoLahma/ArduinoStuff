@@ -8,7 +8,7 @@ LogMessage::LogMessage(const String message) : MessageBase(Messages::LOG), paylo
   
 }
 
-Vector<unsigned char> LogMessage::encode()
+Vector<unsigned char> LogMessage::encode() const
 {
   Vector<unsigned char> retVal(payload.length());
 

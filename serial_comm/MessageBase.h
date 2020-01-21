@@ -9,9 +9,9 @@ class MessageBase
   public:
   MessageBase(const Messages& type);
   virtual ~MessageBase() {}
-  virtual Vector<unsigned char> encode() = 0;
+  virtual Vector<unsigned char> encode() const = 0;
   virtual void decode(const unsigned char* data, const uint16_t size) = 0;
-  Messages getType();
+  Messages getType() const;
 
   protected:
   const Messages msgType;

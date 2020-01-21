@@ -11,7 +11,7 @@ payload(0u)
   
 }
 
-Vector<unsigned char> HandshakeMessage::encode()
+Vector<unsigned char> HandshakeMessage::encode() const
 {
   unsigned char buf[2u] = {(unsigned char) (payload & 0xFF), (unsigned char) (payload >> 8)};
   

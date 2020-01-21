@@ -9,6 +9,12 @@
 
 class ProtocolBase;
 
+/**
+ * The SerialCommTask is responsible for sending
+ * and receiving Messages.
+ * 
+ * This is the entry point for communication in the system
+ */
 class SerialCommTask : public TaskBase, public SerialCommIf
 {
   public:

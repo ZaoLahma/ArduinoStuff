@@ -9,7 +9,7 @@ void TaskContext::run()
   }
 }
 
-void TaskContext::add_task(TaskBase* const task)
+void TaskContext::addTask(TaskBase* const task)
 {
   tasks.push_back(task);
 }
