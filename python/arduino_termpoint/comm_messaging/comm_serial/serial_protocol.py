@@ -2,6 +2,7 @@ from ..protocol import Protocol
 from .messages import Messages
 from .handshake_message import HandshakeMessage
 from .heartbeat_message import HeartbeatMessage
+from .log_message import LogMessage
 import struct
 
 class SerialProtocol(Protocol):
@@ -20,7 +21,7 @@ class SerialProtocol(Protocol):
         if Messages.HANDSHAKE == msg_type:
             msg = HandshakeMessage()
         elif Messages.LOG == msg_type:
-            print("Log received but not handled")
+            msg = LogMessage()
         elif Messages.HEARTBEAT == msg_type:
             msg = HeartbeatMessage()
 
