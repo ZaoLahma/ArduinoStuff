@@ -1,6 +1,6 @@
 #include "SerialCommTask.h"
 #include "SerialCommIf.h"
-#include "BlinkTask.h"
+#include "PinToggleTask.h"
 #include "TaskContext.h"
 #include "SerialProtocol.h"
 #include "LogMessage.h"
@@ -18,7 +18,7 @@ void setup() {
   taskContext.addTask(static_cast<SerialCommTask*>(serialCommIf));
 
   const uint16_t blinkRunPeriodicity = 100u; //ms
-  taskContext.addTask(new BlinkTask(blinkRunPeriodicity, LED_BUILTIN));
+  taskContext.addTask(new PinToggleTask(blinkRunPeriodicity, LED_BUILTIN));
 
   const uint16_t stateRunPeriodicity = 250u; //ms
   taskContext.addTask(new ProgStateTask(stateRunPeriodicity, serialCommIf));

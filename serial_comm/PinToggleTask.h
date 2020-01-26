@@ -7,21 +7,21 @@
 /**
  * A pin toggling task
  */
-class BlinkTask : public TaskBase
+class PinToggleTask : public TaskBase
 {
   public:
-  BlinkTask(const uint16_t runPeriodicity, const uint8_t _pinNumber);
+  PinToggleTask(const uint16_t runPeriodicity, const uint8_t _pinNumber);
 
   protected:
   void execute(const unsigned long newTime);
 
-  enum class BlinkMode
+  enum class PinState
   {
-    ON,
-    OFF
+    OFF,
+    ON
   };
 
-  BlinkMode blinkMode;
+  PinState pinState;
 
   uint8_t pinNumber;
 
